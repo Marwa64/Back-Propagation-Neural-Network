@@ -180,9 +180,9 @@ public class FeedForward {
 	
 	public static List<Double> calculateOutput() {
 		outputLayerNodes = new ArrayList<Double>();
-		for (int i = 0; i < n; i++) {
+		for (int i = 0; i < n; i++) { // loop over output nodes
 			double param = 0.0;
-			for (int j = 0; j < l; j++) {
+			for (int j = 0; j < l; j++) { // loop over hidden nodes
 				param += (outputW.get(i).get(j) * hiddenLayerNodes.get(j));
 			}
 			outputLayerNodes.add(sigmoid(param));

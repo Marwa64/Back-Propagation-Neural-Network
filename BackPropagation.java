@@ -13,7 +13,7 @@ public class BackPropagation {
 	static List<List<Double>> hiddenW = new ArrayList<List<Double>>();
 	static List<Double> hiddenLayerNodes = new ArrayList<Double>();
 	static List<Double> outputLayerNodes = new ArrayList<Double>();
-	static double MSE = 0.0, learningRate = 0.5;
+	static double MSE = 0.0, learningRate = 0.3;
 	
 	BackPropagation(int m, int l, int n, int k, List<List<Double>> x, List<List<Double>> y) {
 		this.m = m;
@@ -26,14 +26,20 @@ public class BackPropagation {
 		// Initialize Weight
 		Double[] zeros;
 		for (int i = 0; i < l; i++) {
-			zeros = new Double[m+1];
-			Arrays.fill(zeros, 0.0);
-			hiddenW.add(Arrays.asList(zeros));
+			List<Double> temp = new ArrayList<Double>();
+			for (int j = 0; j < m+1; j++) {
+				double random = Math.random() * (0.8-(-0.3)) + (-0.3);
+				temp.add(random);
+			}
+			hiddenW.add(temp);
 		}
 		for (int i = 0; i < n; i++) {
-			zeros = new Double[l];
-			Arrays.fill(zeros, 0.0);
-			outputW.add(Arrays.asList(zeros));
+			List<Double> temp = new ArrayList<Double>();
+			for (int j = 0; j < l; j++) {
+				double random = Math.random() * (0.8-(-0.3)) + (-0.3);
+				temp.add(random);
+			}
+			outputW.add(temp);
 		}
 	}
 
@@ -68,7 +74,7 @@ public class BackPropagation {
 				// Update output weight
 				for (int j = 0; j < n; j++) {
 					for (int j2 = 0; j2 < l; j2++) {
-						double newWeight = outputW.get(j).get(j2) - (learningRate * outputDelta.get(j) * hiddenLayerNodes.get(j2));
+						double newWeight = outputW.get(j).get(j2) - learningRate * outputDelta.get(j) * hiddenLayerNodes.get(j2);
 						outputW.get(j).set(j2, newWeight);
 					}
 				}
@@ -76,7 +82,7 @@ public class BackPropagation {
 				// Update hidden weight
 				for (int j = 0; j < l; j++) {
 					for (int j2 = 0; j2 < m+1; j2++) {
-						double newWeight = hiddenW.get(j).get(j2) - (learningRate * hiddenDelta.get(j) * x.get(i).get(j2));
+						double newWeight = hiddenW.get(j).get(j2) - learningRate * hiddenDelta.get(j) * x.get(i).get(j2);
 						hiddenW.get(j).set(j2, newWeight);
 					}
 				}
@@ -105,6 +111,7 @@ public class BackPropagation {
 	        	myWriter.write(hiddenW.get(i).toString());
 	        	myWriter.write("\n");
 	        }
+
 	        myWriter.write("Output Weight:\n");
 	        for (int i = 0; i < outputW.size(); i++) {
 	        	myWriter.write(outputW.get(i).toString());
