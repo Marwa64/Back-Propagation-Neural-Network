@@ -19,13 +19,6 @@ public class FeedForward {
 	FeedForward(String fileName) {
 		initializeData(fileName);
 		normalizeData();
-		double cost = 0.0;
-		for (int index = 0; index < k; index++) {
-			calculateHidden(index);
-			calculateOutput();
-			cost += costFunction(index);
-		}
-		MSE = cost / k;
 	}
 	
 	private static void initializeData(String fileName) {
@@ -64,19 +57,11 @@ public class FeedForward {
 		}  catch(IOException e)  {  
 			e.printStackTrace();  
 		}
-		
-		// Initialize Weight
-		Double[] zeros;
-		for (int i = 0; i < l; i++) {
-			zeros = new Double[m+1];
-			Arrays.fill(zeros, 0.0);
-			hiddenW.add(Arrays.asList(zeros));
-		}
-		for (int i = 0; i < n; i++) {
-			zeros = new Double[l];
-			Arrays.fill(zeros, 0.0);
-			outputW.add(Arrays.asList(zeros));
-		}
+	}
+	
+	public void setWeights(List<List<Double>> outputW, List<List<Double>> hiddenW) {
+		this.outputW = outputW;
+		this.hiddenW = hiddenW;
 	}
 	
 	private static void normalizeData() {
@@ -149,6 +134,17 @@ public class FeedForward {
 		for (int i = 0; i < n; i++) {
 			sum += Math.pow(outputLayerNodes.get(trainingIndex).get(i) - y.get(trainingIndex).get(i), 2.0);
 		}
-		return 1/2 * sum;
+		return 0.5 * sum;
+	}
+	
+	public static double calculateMSE() {
+		double cost = 0.0;
+		for (int index = 0; index < k; index++) {
+			calculateHidden(index);
+			calculateOutput();
+			cost += costFunction(index);
+		}
+		MSE = cost / (double) k;
+		return MSE;
 	}
 }
