@@ -64,6 +64,44 @@ public class FeedForward {
 		this.hiddenW = hiddenW;
 	}
 	
+	public void getWeights() {
+		boolean hidden = true;
+		try  {  
+			File file=new File("weights.txt"); 
+			FileReader fr=new FileReader(file);
+			BufferedReader br=new BufferedReader(fr); 
+			String line;  
+			while((line=br.readLine())!=null)  {
+				if (line.equalsIgnoreCase("Hidden Weight:")) {
+					hidden = true;
+					continue;
+				}
+				if (line.equalsIgnoreCase("Output Weight:")) {
+					hidden = false;
+					continue;
+				}
+				if (hidden) {
+				    String[] elements = line.substring(1, line.length() - 1).split(", ");
+				    List<Double> list = new ArrayList<Double>(elements.length);
+				    for (String item : elements) {
+				        list.add(Double.valueOf(item));
+				    }
+					 hiddenW.add(list);
+				} else {
+				    String[] elements = line.substring(1, line.length() - 1).split(", ");
+				    List<Double> list = new ArrayList<Double>(elements.length);
+				    for (String item : elements) {
+				        list.add(Double.valueOf(item));
+				    }
+					 outputW.add(list);
+				}
+			}  
+			fr.close();
+		}  catch(IOException e)  {  
+			e.printStackTrace();  
+		}
+	}
+	
 	private static void normalizeData() {
 		Double[] zeros = new Double[m];
 		Arrays.fill(zeros, 0.0);
@@ -155,7 +193,6 @@ public class FeedForward {
 	public static double costFunction(int trainingIndex) {
 		double sum = 0.0;
 		for (int i = 0; i < n; i++) {
-			//System.out.println(outputLayerNodes.get(i) + " vs " + y.get(trainingIndex).get(i));
 			sum += Math.pow(outputLayerNodes.get(i) - y.get(trainingIndex).get(i), 2.0);
 		}
 		return 0.5 * sum;
@@ -175,8 +212,8 @@ public class FeedForward {
 	
 	public static void main(String[] args) {
 		
-		FeedForward feedforward = new FeedForward("test.txt");
-		feedforward.setWeights(outputW, hiddenW);
+		FeedForward feedforward = new FeedForward("train.txt");
+		feedforward.getWeights();
 		feedforward.calculateMSE();
 		
 	}

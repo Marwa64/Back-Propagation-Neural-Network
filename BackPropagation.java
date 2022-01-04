@@ -1,3 +1,6 @@
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -93,12 +96,34 @@ public class BackPropagation {
 		}
 		return 0.5 * sum;
 	}
+	
+	public static void saveWeights() {
+	    try {
+	        FileWriter myWriter = new FileWriter("weights.txt");
+	        myWriter.write("Hidden Weight:\n");
+	        for (int i = 0; i < hiddenW.size(); i++) {
+	        	myWriter.write(hiddenW.get(i).toString());
+	        	myWriter.write("\n");
+	        }
+	        myWriter.write("Output Weight:\n");
+	        for (int i = 0; i < outputW.size(); i++) {
+	        	myWriter.write(outputW.get(i).toString());
+	        	if (i != outputW.size()-1)
+	        		myWriter.write("\n");
+	        }
+	        myWriter.close();
+	        System.out.println("Weights Saved.");
+	      } catch (IOException e) {
+	        System.out.println("An error occurred.");
+	        e.printStackTrace();
+	      }
+	}
 
 	public static void main(String[] args) {
 		
 		FeedForward ff = new FeedForward("train.txt");
 		BackPropagation bp = new BackPropagation(ff.m, ff.l, ff.n, ff.k, ff.x, ff.y);
 		bp.gradientDescent(500, ff);
-
+		bp.saveWeights();
 	}
 }
