@@ -172,4 +172,12 @@ public class FeedForward {
 		System.out.println("MSE = " + MSE);
 		return MSE;
 	}
+	
+	public static void main(String[] args) {
+		
+		FeedForward feedforward = new FeedForward("test.txt");
+		feedforward.setWeights(outputW, hiddenW);
+		feedforward.calculateMSE();
+		
+	}
 }

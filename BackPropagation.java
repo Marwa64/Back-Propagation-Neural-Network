@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class BackPropagation {
@@ -11,15 +12,26 @@ public class BackPropagation {
 	static List<Double> outputLayerNodes = new ArrayList<Double>();
 	static double MSE = 0.0, learningRate = 0.5;
 	
-	BackPropagation(int m, int l, int n, int k, List<List<Double>> x, List<List<Double>> y, List<List<Double>> outputW, List<List<Double>> hiddenW) {
+	BackPropagation(int m, int l, int n, int k, List<List<Double>> x, List<List<Double>> y) {
 		this.m = m;
 		this.l = l;
 		this.n = n;
 		this.k = k;
 		this.x = x;
 		this.y = y;
-		this.outputW = outputW;
-		this.hiddenW = hiddenW;
+		
+		// Initialize Weight
+		Double[] zeros;
+		for (int i = 0; i < l; i++) {
+			zeros = new Double[m+1];
+			Arrays.fill(zeros, 0.0);
+			hiddenW.add(Arrays.asList(zeros));
+		}
+		for (int i = 0; i < n; i++) {
+			zeros = new Double[l];
+			Arrays.fill(zeros, 0.0);
+			outputW.add(Arrays.asList(zeros));
+		}
 	}
 
 	public void gradientDescent(int iterations, FeedForward feedforward) {
@@ -82,4 +94,11 @@ public class BackPropagation {
 		return 0.5 * sum;
 	}
 
+	public static void main(String[] args) {
+		
+		FeedForward ff = new FeedForward("train.txt");
+		BackPropagation bp = new BackPropagation(ff.m, ff.l, ff.n, ff.k, ff.x, ff.y);
+		bp.gradientDescent(500, ff);
+
+	}
 }
