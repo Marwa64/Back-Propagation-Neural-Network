@@ -23,10 +23,15 @@ public class Main {
 			Arrays.fill(zeros, 0.0);
 			outputW.add(Arrays.asList(zeros));
 		}
+		
 		ff.setWeights(outputW, hiddenW);
 		System.out.println(ff.calculateMSE());
+		//System.out.println(outputW);
+		//System.out.println(hiddenW);
 		BackPropagation bp = new BackPropagation(ff.m, ff.l, ff.n, ff.k, ff.x, ff.y, outputW, hiddenW, ff.hiddenLayerNodes, ff.outputLayerNodes);
-		bp.gradientDescent(500);
+		bp.gradientDescent(1, ff);
+		//System.out.println(outputW);
+		//System.out.println(hiddenW);
 		ff.setWeights(outputW, hiddenW);
 		System.out.println(ff.calculateMSE());
 	}

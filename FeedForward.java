@@ -104,20 +104,25 @@ public class FeedForward {
 	
 	// Activation Function
 	private static double sigmoid(double num) {
+		//System.out.println(1 + Math.exp((-1.0 * num)));
 		return 1/(1 + Math.exp((-1.0 * num)));
 	}
 	
-	private static void calculateHidden(int trainingIndex) {
+	public static List<Double> calculateHidden(int trainingIndex) {
 		for (int i = 0; i < l; i++) {
 			double param = 0.0;
 			for (int j = 0; j < m; j++) {
 				param += (hiddenW.get(i).get(j) * x.get(trainingIndex).get(j));
+				//System.out.println(hiddenW.get(i).get(j) + " * " + x.get(trainingIndex).get(j));
 			}
+			//System.out.println(sigmoid(param));
 			hiddenLayerNodes.add(sigmoid(param));
 		}
+		//System.out.println(hiddenW);
+		return hiddenLayerNodes;
 	}
 	
-	private static void calculateOutput() {
+	public static List<List<Double>> calculateOutput() {
 		List<Double> outputNode = new ArrayList<Double>();
 		for (int i = 0; i < n; i++) {
 			double param = 0.0;
@@ -127,6 +132,7 @@ public class FeedForward {
 			outputNode.add(sigmoid(param));
 		}
 		outputLayerNodes.add(outputNode);
+		return outputLayerNodes;
 	}
 	
 	public static double costFunction(int trainingIndex) {
