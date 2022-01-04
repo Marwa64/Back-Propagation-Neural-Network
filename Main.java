@@ -26,12 +26,8 @@ public class Main {
 		
 		ff.setWeights(outputW, hiddenW);
 		System.out.println(ff.calculateMSE());
-		//System.out.println(outputW);
-		//System.out.println(hiddenW);
-		BackPropagation bp = new BackPropagation(ff.m, ff.l, ff.n, ff.k, ff.x, ff.y, outputW, hiddenW, ff.hiddenLayerNodes, ff.outputLayerNodes);
-		bp.gradientDescent(1, ff);
-		//System.out.println(outputW);
-		//System.out.println(hiddenW);
+		BackPropagation bp = new BackPropagation(ff.m, ff.l, ff.n, ff.k, ff.x, ff.y, outputW, hiddenW);
+		bp.gradientDescent(5, ff);
 		ff.setWeights(outputW, hiddenW);
 		System.out.println(ff.calculateMSE());
 	}

@@ -13,7 +13,7 @@ public class FeedForward {
 	static List<List<Double>> outputW = new ArrayList<List<Double>>();
 	static List<List<Double>> hiddenW = new ArrayList<List<Double>>();
 	static List<Double> hiddenLayerNodes = new ArrayList<Double>();
-	static List<List<Double>> outputLayerNodes = new ArrayList<List<Double>>();
+	static List<Double> outputLayerNodes = new ArrayList<Double>();
 	static double MSE = 0.0;
 	
 	FeedForward(String fileName) {
@@ -104,41 +104,38 @@ public class FeedForward {
 	
 	// Activation Function
 	private static double sigmoid(double num) {
-		//System.out.println(1 + Math.exp((-1.0 * num)));
-		return 1/(1 + Math.exp((-1.0 * num)));
+		return 1.0 / (1.0 + Math.exp((-1.0 * num)));
 	}
 	
 	public static List<Double> calculateHidden(int trainingIndex) {
-		for (int i = 0; i < l; i++) {
+		hiddenLayerNodes = new ArrayList<Double>();
+		for (int i = 0; i < l; i++) { // loop over hidden layer neurons
 			double param = 0.0;
-			for (int j = 0; j < m; j++) {
+			for (int j = 0; j < m; j++) { // loop over features
 				param += (hiddenW.get(i).get(j) * x.get(trainingIndex).get(j));
-				//System.out.println(hiddenW.get(i).get(j) + " * " + x.get(trainingIndex).get(j));
 			}
-			//System.out.println(sigmoid(param));
 			hiddenLayerNodes.add(sigmoid(param));
 		}
-		//System.out.println(hiddenW);
 		return hiddenLayerNodes;
 	}
 	
-	public static List<List<Double>> calculateOutput() {
-		List<Double> outputNode = new ArrayList<Double>();
+	public static List<Double> calculateOutput() {
+		outputLayerNodes = new ArrayList<Double>();
 		for (int i = 0; i < n; i++) {
 			double param = 0.0;
 			for (int j = 0; j < l; j++) {
 				param += (outputW.get(i).get(j) * hiddenLayerNodes.get(j));
 			}
-			outputNode.add(sigmoid(param));
+			outputLayerNodes.add(sigmoid(param));
 		}
-		outputLayerNodes.add(outputNode);
 		return outputLayerNodes;
 	}
 	
 	public static double costFunction(int trainingIndex) {
 		double sum = 0.0;
 		for (int i = 0; i < n; i++) {
-			sum += Math.pow(outputLayerNodes.get(trainingIndex).get(i) - y.get(trainingIndex).get(i), 2.0);
+			//System.out.println(outputLayerNodes.get(i) + " vs " + y.get(trainingIndex).get(i));
+			sum += Math.pow(outputLayerNodes.get(i) - y.get(trainingIndex).get(i), 2.0);
 		}
 		return 0.5 * sum;
 	}

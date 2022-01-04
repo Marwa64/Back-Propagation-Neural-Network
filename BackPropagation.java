@@ -8,10 +8,10 @@ public class BackPropagation {
 	static List<List<Double>> outputW = new ArrayList<List<Double>>();
 	static List<List<Double>> hiddenW = new ArrayList<List<Double>>();
 	static List<Double> hiddenLayerNodes = new ArrayList<Double>();
-	static List<List<Double>> outputLayerNodes = new ArrayList<List<Double>>();
-	static double MSE = 0.0, learningRate = 0.002;
+	static List<Double> outputLayerNodes = new ArrayList<Double>();
+	static double MSE = 0.0, learningRate = 0.0005;
 	
-	BackPropagation(int m, int l, int n, int k, List<List<Double>> x, List<List<Double>> y, List<List<Double>> outputW, List<List<Double>> hiddenW, List<Double> hiddenLayerNodes, List<List<Double>> outputLayerNodes) {
+	BackPropagation(int m, int l, int n, int k, List<List<Double>> x, List<List<Double>> y, List<List<Double>> outputW, List<List<Double>> hiddenW) {
 		this.m = m;
 		this.l = l;
 		this.n = n;
@@ -20,28 +20,23 @@ public class BackPropagation {
 		this.y = y;
 		this.outputW = outputW;
 		this.hiddenW = hiddenW;
-		this.hiddenLayerNodes = hiddenLayerNodes;
-		this.outputLayerNodes = outputLayerNodes;
 	}
-	
-	public void gradientDescent(int iterations, FeedForward ff) {
-		
+
+	public void gradientDescent(int iterations, FeedForward feedforward) {
 		for (int itr = 0; itr < iterations; itr++) {
 			double cost = 0.0;
 			// Loop over the training examples
 			for (int i = 0; i < k; i++) {
 				
-				ff.setWeights(outputW, hiddenW);
-				this.hiddenLayerNodes = ff.calculateHidden(i);
-				this.outputLayerNodes = ff.calculateOutput();
-				
-				//System.out.println(outputLayerNodes);
+				feedforward.setWeights(outputW, hiddenW);
+				this.hiddenLayerNodes = feedforward.calculateHidden(i);
+				this.outputLayerNodes = feedforward.calculateOutput();
 				
 				List<Double> outputDelta = new ArrayList<Double>();
 				List<Double> hiddenDelta = new ArrayList<Double>();
 				// Calculate delta for output neurons
 				for (int j = 0; j < n; j++) {
-					double delta = (outputLayerNodes.get(i).get(j) - y.get(i).get(j)) * outputLayerNodes.get(i).get(j) * (1 - outputLayerNodes.get(i).get(j));
+					double delta = (outputLayerNodes.get(j) - y.get(i).get(j)) * outputLayerNodes.get(j) * (1 - outputLayerNodes.get(j));
 					outputDelta.add(delta);
 				}
 				
@@ -62,7 +57,6 @@ public class BackPropagation {
 						outputW.get(j).set(j2, newWeight);
 					}
 				}
-				//System.out.println(outputW);
 				
 				// Update hidden weight
 				for (int j = 0; j < l; j++) {
@@ -71,19 +65,17 @@ public class BackPropagation {
 						hiddenW.get(j).set(j2, newWeight);
 					}
 				}
-				//System.out.println(hiddenW);
 				cost += costFunction(i);
-				//System.out.println("Iteration " + itr + " : example " + i + " cost = " + cost);
 			}
 			MSE = cost / (double) k;
-			//System.out.println("Iteration " + itr + " : Cost = " + cost);
+			System.out.println("Iteration " + itr + " : Cost = " + cost);
 		}
 	}
 	
 	public static double costFunction(int trainingIndex) {
 		double sum = 0.0;
 		for (int i = 0; i < n; i++) {
-			sum += Math.pow(outputLayerNodes.get(trainingIndex).get(i) - y.get(trainingIndex).get(i), 2.0);
+			sum += Math.pow(outputLayerNodes.get(i) - y.get(trainingIndex).get(i), 2.0);
 		}
 		return 0.5 * sum;
 	}
