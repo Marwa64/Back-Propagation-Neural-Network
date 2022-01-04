@@ -25,10 +25,11 @@ public class Main {
 		}
 		
 		ff.setWeights(outputW, hiddenW);
-		System.out.println(ff.calculateMSE());
 		BackPropagation bp = new BackPropagation(ff.m, ff.l, ff.n, ff.k, ff.x, ff.y, outputW, hiddenW);
-		bp.gradientDescent(5, ff);
-		ff.setWeights(outputW, hiddenW);
-		System.out.println(ff.calculateMSE());
+		bp.gradientDescent(500, ff);
+		
+		/*FeedForward feedforward = new FeedForward("test.txt");
+		feedforward.setWeights(outputW, hiddenW);
+		feedforward.calculateMSE();*/
 	}
 }

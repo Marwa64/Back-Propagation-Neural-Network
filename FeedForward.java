@@ -69,6 +69,12 @@ public class FeedForward {
 		Arrays.fill(zeros, 0.0);
 		// Calculate Mean
 		List<Double> mean = Arrays.asList(zeros);
+		Double[] fillY = new Double[n];
+		Arrays.fill(fillY, 10000.0);
+		List<Double> minY = Arrays.asList(fillY);
+		fillY = new Double[n];
+		Arrays.fill(fillY, 0.0);
+		List<Double> maxY = Arrays.asList(fillY);
 		for (int i = 0; i < k; i++) {
 			for (int j = 1; j < m; j++) {
 				double newSum = mean.get(j-1) + x.get(i).get(j);
@@ -76,6 +82,15 @@ public class FeedForward {
 				
 				if (i == k-1) {
 					mean.set(j-1, newSum/k);
+				}
+			}
+			// Get the min and max of output y
+			for (int j = 0; j < n; j++) {
+				if (y.get(i).get(j) < minY.get(j)) {
+					minY.set(j, y.get(i).get(j));
+				}
+				if (y.get(i).get(j) > maxY.get(j)) {
+					maxY.set(j, y.get(i).get(j));
 				}
 			}
 		}
@@ -95,9 +110,15 @@ public class FeedForward {
 		}
 		// Calculate normalized values
 		for (int i = 0; i < k; i++) {
+			// Normalize X values
 			for (int j = 1; j < m; j++) {
 				Double newVal = (x.get(i).get(j) - mean.get(j-1)) / std.get(j-1);
 				x.get(i).set(j, newVal);
+			}
+			// Normalize Y values
+			for (int j = 0; j < n; j++) {
+				double newVal = (y.get(i).get(j) - minY.get(j)) / (maxY.get(j) - minY.get(j));
+				y.get(i).set(j, newVal);
 			}
 		}
 	}
@@ -148,6 +169,7 @@ public class FeedForward {
 			cost += costFunction(index);
 		}
 		MSE = cost / (double) k;
+		System.out.println("MSE = " + MSE);
 		return MSE;
 	}
 }

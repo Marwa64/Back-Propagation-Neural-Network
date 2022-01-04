@@ -9,7 +9,7 @@ public class BackPropagation {
 	static List<List<Double>> hiddenW = new ArrayList<List<Double>>();
 	static List<Double> hiddenLayerNodes = new ArrayList<Double>();
 	static List<Double> outputLayerNodes = new ArrayList<Double>();
-	static double MSE = 0.0, learningRate = 0.0005;
+	static double MSE = 0.0, learningRate = 0.5;
 	
 	BackPropagation(int m, int l, int n, int k, List<List<Double>> x, List<List<Double>> y, List<List<Double>> outputW, List<List<Double>> hiddenW) {
 		this.m = m;
@@ -70,6 +70,8 @@ public class BackPropagation {
 			MSE = cost / (double) k;
 			System.out.println("Iteration " + itr + " : Cost = " + cost);
 		}
+		System.out.println("\n---------------------\n");
+		System.out.println("MSE = " + MSE);
 	}
 	
 	public static double costFunction(int trainingIndex) {
