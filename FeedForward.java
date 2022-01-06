@@ -103,16 +103,17 @@ public class FeedForward {
 	}
 	
 	private static void normalizeData() {
-		Double[] zeros = new Double[m];
-		Arrays.fill(zeros, 0.0);
-		// Calculate Mean
-		List<Double> mean = Arrays.asList(zeros);
 		Double[] fillY = new Double[n];
 		Arrays.fill(fillY, 10000.0);
 		List<Double> minY = Arrays.asList(fillY);
 		fillY = new Double[n];
 		Arrays.fill(fillY, 0.0);
 		List<Double> maxY = Arrays.asList(fillY);
+		
+		// Calculate Mean
+		Double[] zeros = new Double[m];
+		Arrays.fill(zeros, 0.0);
+		List<Double> mean = Arrays.asList(zeros);
 		for (int i = 0; i < k; i++) {
 			for (int j = 1; j < m; j++) {
 				double newSum = mean.get(j-1) + x.get(i).get(j);
@@ -198,7 +199,7 @@ public class FeedForward {
 		return 0.5 * sum;
 	}
 	
-	public static double calculateMSE() {
+	public double calculateMSE() {
 		double cost = 0.0;
 		for (int index = 0; index < k; index++) {
 			calculateHidden(index);

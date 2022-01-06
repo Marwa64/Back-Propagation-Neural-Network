@@ -1,8 +1,6 @@
-import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class BackPropagation {
@@ -13,7 +11,7 @@ public class BackPropagation {
 	static List<List<Double>> hiddenW = new ArrayList<List<Double>>();
 	static List<Double> hiddenLayerNodes = new ArrayList<Double>();
 	static List<Double> outputLayerNodes = new ArrayList<Double>();
-	static double MSE = 0.0, learningRate = 0.3;
+	static double MSE = 0.0, learningRate = 0.5;
 	
 	BackPropagation(int m, int l, int n, int k, List<List<Double>> x, List<List<Double>> y) {
 		this.m = m;
@@ -24,7 +22,6 @@ public class BackPropagation {
 		this.y = y;
 		
 		// Initialize Weight
-		Double[] zeros;
 		for (int i = 0; i < l; i++) {
 			List<Double> temp = new ArrayList<Double>();
 			for (int j = 0; j < m+1; j++) {
@@ -55,6 +52,7 @@ public class BackPropagation {
 				
 				List<Double> outputDelta = new ArrayList<Double>();
 				List<Double> hiddenDelta = new ArrayList<Double>();
+				
 				// Calculate delta for output neurons
 				for (int j = 0; j < n; j++) {
 					double delta = (outputLayerNodes.get(j) - y.get(i).get(j)) * outputLayerNodes.get(j) * (1 - outputLayerNodes.get(j));
@@ -103,7 +101,7 @@ public class BackPropagation {
 		return 0.5 * sum;
 	}
 	
-	public static void saveWeights() {
+	public void saveWeights() {
 	    try {
 	        FileWriter myWriter = new FileWriter("weights.txt");
 	        myWriter.write("Hidden Weight:\n");
